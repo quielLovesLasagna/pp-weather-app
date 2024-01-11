@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="description"
+			content="Discover real-time weather updates for any country with our easy-to-use Weather App."
+		/>
+		<link rel="icon" type="image/png" href="../images/logo.png" />
+		<!-- PHOSPHOR ICONS -->
+		<script src="https://unpkg.com/@phosphor-icons/web@2.0.3"></script>
+		<!-- SCSS -->
+		<link rel="stylesheet" href="./scss/main.scss" />
+		<!-- SCRIPT -->
+		<script defer type="module" src="./js/script.js"></script>
+		<title>Weather App</title>
+	</head>
+	<body>
+		<main>
+			<div class="card">
+				<div class="card__search">
+					<input
+						type="text"
+						placeholder="Search location"
+						class="card__input"
+					/>
+					<button class="card__button">
+						<i class="ph-bold ph-magnifying-glass card__search-icon"></i>
+					</button>
+					<!-- <span class="card__error">Sample error</span> -->
+				</div>
+				<div class="weather hide-results">
+					<p class="weather__location">Sample location</p>
+					<div class="weather__details">
+						<p class="weather__temperature">23&deg;C</p>
+						<div class="weather__image-container">
+							<img
+								src="../images/clear.png"
+								alt="Weather image"
+								class="weather__image"
+							/>
+							<p class="weather__tag">...</p>
+						</div>
+					</div>
+					<div class="weather__infos">
+						<div class="weather__info">
+							<div class="weather__info-tag-container">
+								<i class="ph-bold ph-drop-half-bottom weather__info-icon"></i>
+								<p class="weather__info-tag">Humidity</p>
+							</div>
+							<p class="weather__info-text weather__humidity">...</p>
+						</div>
+						<div class="weather__info">
+							<div class="weather__info-tag-container">
+								<i class="ph-bold ph-wind weather__info-icon"></i>
+								<p class="weather__info-tag">Wind</p>
+							</div>
+							<p class="weather__info-text weather__wind">...</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>

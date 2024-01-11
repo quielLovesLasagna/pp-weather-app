@@ -1,0 +1,17 @@
+{
+	"name": "weather-app",
+	"version": "1.0.0",
+	"description": "Discover real-time weather updates for any country with our easy-to-use Weather App.",
+	"main": "src/js/script.js",
+	"scripts": {
+		"start": "parcel src/index.html",
+		"build": "parcel build src/index.html"
+	},
+	"keywords": [],
+	"author": "Exequiel",
+	"license": "ISC",
+	"devDependencies": {
+		"parcel-bundler": "^1.12.5",
+		"sass": "^1.69.7"
+	}
+}
