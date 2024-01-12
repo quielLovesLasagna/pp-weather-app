@@ -7,14 +7,18 @@ import mistImage from "../../images/mist.png";
 import rainImage from "../../images/rain.png";
 import snowImage from "../../images/snow.png";
 
-// ELEMENT/.
-const APIKEY = "a707d9b2c96a826ef5f94abfef56ed9e";
-const APIURL =
+// API/S
+const WEATHER_API_KEY = "a707d9b2c96a826ef5f94abfef56ed9e";
+const WEATHER_API_URL =
 	"https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+const FLAG_API_URL = "https://restcountries.com/v3.1/name/";
+
+// ELEMENT/S
 const inputEl = document.querySelector(".card__input");
 const searchBtn = document.querySelector(".card__button");
 const resultsEl = document.querySelector(".weather");
 const locationEl = document.querySelector(".weather__location");
+const flagEl = document.querySelector(".weather__flag");
 const temperatureEl = document.querySelector(".weather__temperature");
 const weatherImgEl = document.querySelector(".weather__image");
 const weatherTagEl = document.querySelector(".weather__tag");
@@ -22,29 +26,43 @@ const humidityEl = document.querySelector(".weather__humidity");
 const windEl = document.querySelector(".weather__wind");
 
 // FUNCTION/S
-async function getWeatherData(location) {
+async function isValidCountry(countryName) {
 	try {
-		// -- Request weather data
-		const response = await fetch(APIURL + location + "&appid=" + APIKEY);
+		const response = await fetch(FLAG_API_URL + countryName);
+		const data = await response.json();
 
-		if (!response.ok || +response.status === 404) {
-			throw new Error(
-				"There was a problem getting the weather data, please provide a valid location and try again."
+		// -- Check if the flag API returned valid data for the given country
+		return response.ok && data.length > 0;
+	} catch (error) {
+		return false;
+	}
+}
+
+async function getData(location) {
+	try {
+		if (await isValidCountry(location)) {
+			// -- Request weather and flag data
+			const weatherRes = await fetch(
+				WEATHER_API_URL + location + "&appid=" + WEATHER_API_KEY
 			);
+			const flagRes = await fetch(FLAG_API_URL + location);
+
+			// -- Extract weather and flag data from response
+			const weatherData = await weatherRes.json();
+			const flagData = await flagRes.json();
+
+			// -- Invoke displayResults function using weatherData
+			displayResults(weatherData, flagData);
+		} else {
+			throw new Error("Invalid country. Please enter a valid country name.");
 		}
-
-		// -- Extract weather data from response
-		const weatherData = await response.json();
-
-		// -- Invoke displayWeatherData function using weatherData
-		displayWeatherData(weatherData);
 	} catch (error) {
 		alert(error);
 	}
 }
 
-function displayWeatherData(data) {
-	// Map the weather tags to the corresponding images
+function displayResults(weatherData, flagData) {
+	// -- Map the weather tags to the corresponding images
 	const imageMap = {
 		clear: clearImage,
 		clouds: cloudsImage,
@@ -54,16 +72,18 @@ function displayWeatherData(data) {
 		snow: snowImage,
 	};
 
-	// Get specific data from function input
-	const location = data.name;
-	const temperature = data.main.temp;
-	const weatherTag = data.weather[0].main;
-	const humidity = data.main.humidity;
-	const wind = data.wind.speed;
+	// -- Get specific weather and flag data from function input
+	const location = weatherData.name;
+	const flag = flagData[0].flags.png;
+	const temperature = weatherData.main.temp;
+	const weatherTag = weatherData.weather[0].main;
+	const humidity = weatherData.main.humidity;
+	const wind = weatherData.wind.speed;
 	const weatherImagePath = imageMap[weatherTag.toLowerCase()];
 
-	// Display data to UI
+	// -- Display data to UI
 	locationEl.textContent = location;
+	flagEl.src = flag;
 	temperatureEl.textContent = `${Math.round(temperature)}°C`;
 	weatherTagEl.textContent = weatherTag;
 	humidityEl.textContent = humidity + "%";
@@ -75,6 +95,12 @@ function displayWeatherData(data) {
 }
 
 // EVENT LISTENER/S
+inputEl.addEventListener("keyup", (event) => {
+	if (event.key === "Enter") {
+		getData(inputEl.value.trim());
+	}
+});
+
 searchBtn.addEventListener("click", () => {
-	getWeatherData(inputEl.value);
+	getData(inputEl.value.trim());
 });

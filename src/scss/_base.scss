@@ -82,9 +82,20 @@ body {
 	flex-direction: column;
 	margin-top: 2rem;
 
+	&__location-container {
+		display: flex;
+		align-items: center;
+	}
+
+	&__flag {
+		height: 2.4rem;
+		border-radius: 0.8rem;
+	}
+
 	&__location {
 		font-size: abs.$fs-medium;
 		font-weight: abs.$fw-small;
+		margin-right: 1rem;
 	}
 
 	&__details {
